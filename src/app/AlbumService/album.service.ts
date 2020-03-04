@@ -25,7 +25,7 @@ export class AlbumService {
   fetchAlbums(){
     const requestBody = 
     `{
-      "accountName" : ${localStorage.getItem("currentAccount")}
+      "accountName" : "${localStorage.getItem("currentAccount")}"
     }`;
     return this.http.post<Album[]>(this.albumsUrl+'read', requestBody, this.httpOptions)
       .pipe(
@@ -42,7 +42,7 @@ export class AlbumService {
   checkAlbumExistance(albumName: string){
     const requestBodyCheckExistance = 
     `{
-      "accountName" : ${localStorage.getItem("currentAccount")}
+      "accountName" : "${localStorage.getItem("currentAccount")}"
     }`;
     return this.http.post<any>(this.albumsUrl+'read', requestBodyCheckExistance, this.httpOptions)
       .pipe(
@@ -59,7 +59,7 @@ export class AlbumService {
   createAlbum(albumName: string){
     const requestBody = 
     `{
-      "accountName" : ${localStorage.getItem("currentAccount")},
+      "accountName" : "${localStorage.getItem("currentAccount")}",
       "albumName" : "${albumName}"
     }`;
     return this.http.post<any>(this.albumsUrl+'create', requestBody, this.httpOptions)
@@ -73,7 +73,7 @@ export class AlbumService {
   deleteAlbum(albumName: string){
     const requestBody = 
     `{
-      "accountName" : ${localStorage.getItem("currentAccount")},
+      "accountName" : "${localStorage.getItem("currentAccount")}",
       "albumName" : "${albumName}"
     }`;
     return this.http.post<any>(this.albumsUrl+'delete', requestBody, this.httpOptions)

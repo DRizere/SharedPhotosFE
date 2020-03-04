@@ -25,7 +25,7 @@ export class PictureService {
   getPicturesOfAlbum(albumName: string){
     const requestBody = 
     `{
-      "accountName" : ${localStorage.getItem("currentAccount")},
+      "accountName" : "${localStorage.getItem("currentAccount")}",
       "albumName" : "${albumName}"
     }`;
     console.log(requestBody);
@@ -40,7 +40,7 @@ export class PictureService {
   pushPictureToAlbum(pictureName: string, pictureEncoding: string, pictureExtension: string){
     const requestBody = 
     `{
-      "accountName" : ${localStorage.getItem("currentAccount")},
+      "accountName" : "${localStorage.getItem("currentAccount")}",
       "albumName" : "${localStorage.getItem("currentAlbum")}",
       "pictureName" : "${pictureName}",
       "base64Encoding": "data:${pictureExtension};base64,${pictureEncoding}"
