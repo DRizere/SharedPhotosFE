@@ -1,0 +1,22 @@
+<p>You're logged in!</p>
+<h3>All current albums:</h3>
+<li *ngFor="let album of albumList">
+    <a (click)="drilldown(album.albumName)">{{album.albumName}}</a>
+    - <a (click)="deleteAlbum(album.albumName)" class="text-danger">Delete</a>
+</li>
+<br>
+<h3>Create a new album:</h3>
+<form [formGroup]="albumForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+        <label for="albumName">Album Name</label>
+        <input type="text" formControlName="albumName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.albumName.errors }" />
+        <div *ngIf="submitted && f.albumName.errors" class="invalid-feedback">
+            <div *ngIf="f.albumName.errors.required">Username is required</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary">
+            Create
+        </button>
+    </div>
+</form>
