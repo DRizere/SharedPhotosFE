@@ -11,7 +11,7 @@ import {catchError, map, tap } from 'rxjs/operators';
 })
 export class AccountService {
 
-  private accountsUrl = 'http://35.235.110.62:80/accounts/'; //URL to accounts API, config later
+  private accountsUrl = 'https://35.235.110.62:80/accounts/'; //URL to accounts API, config later
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json'})
