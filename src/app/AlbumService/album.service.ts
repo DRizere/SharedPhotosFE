@@ -12,7 +12,9 @@ import {catchError, map, tap } from 'rxjs/operators';
 })
 export class AlbumService {
   
-  private albumsUrl = 'http://35.235.110.62:80/albums/'; //URL to accounts API, config later
+  //private albumsUrl = 'http://35.235.110.62:80/albums/'; //URL to accounts API, config later
+
+  private albumsUrl = 'https://76.102.40.223:8443/albums/'; //URL to accounts API, config later
   
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json'})
