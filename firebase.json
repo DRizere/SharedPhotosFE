@@ -1,0 +1,16 @@
+{
+  "hosting": {
+    "public": "dist/shared-photos-fe",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

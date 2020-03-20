@@ -1,5 +1,6 @@
 <li *ngFor="let picture of pictureList">
     <h3>{{picture.pictureName}}</h3>
+    - <a (click)="deletePicture(picture.pictureName)" class="text-danger">Delete</a>
     <img src="data:image/{{picture.pictureExtension}};base64,{{picture.base64Encoding}}" class="responsive"/>
 </li>
 <br>

@@ -14,7 +14,7 @@ export class PictureService {
   
   //private albumsUrl = 'http://35.235.110.62:80/images/'; //URL to accounts API, config later
 
-  private albumsUrl = 'https://76.102.40.223:8443/images/'; //URL to accounts API, config later
+  private imagesUrl = 'https://infinite-coast-90564.herokuapp.com/images/'; //URL to accounts API, config later
   
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json'})
@@ -31,7 +31,7 @@ export class PictureService {
       "albumName" : "${albumName}"
     }`;
     console.log(requestBody);
-    return this.http.post<any>(this.albumsUrl+'read', requestBody, this.httpOptions)
+    return this.http.post<any>(this.imagesUrl+'read', requestBody, this.httpOptions)
       .pipe(
         map(result => {
           return result;
@@ -48,7 +48,23 @@ export class PictureService {
       "base64Encoding": "data:${pictureExtension};base64,${pictureEncoding}"
     }`;
     console.log(requestBody);
-    return this.http.post<any>(this.albumsUrl+'create', requestBody, this.httpOptions)
+    return this.http.post<any>(this.imagesUrl+'create', requestBody, this.httpOptions)
+      .pipe(
+        map(result => {
+          return result;
+        })
+    );
+  }
+
+  deletePictureFromAlbum(pictureName: string){
+    const requestBody = 
+    `{
+      "accountName" : "${localStorage.getItem("currentAccount")}",
+      "albumName" : "${localStorage.getItem("currentAlbum")}",
+      "pictureName" : "${pictureName}"
+    }`;
+    console.log(requestBody);
+    return this.http.post<any>(this.imagesUrl+'delete', requestBody, this.httpOptions)
       .pipe(
         map(result => {
           return result;

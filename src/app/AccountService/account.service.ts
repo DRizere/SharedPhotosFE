@@ -12,7 +12,7 @@ import {catchError, map, tap } from 'rxjs/operators';
 export class AccountService {
 
   //private accountsUrl = 'http://35.235.110.62:80/accounts/'; //URL to accounts API, config later
-  private accountsUrl = 'https://76.102.40.223:8443/accounts/';
+  private accountsUrl = 'https://infinite-coast-90564.herokuapp.com/accounts/';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json'})

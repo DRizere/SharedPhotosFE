@@ -89,4 +89,22 @@ export class SingularAlbumPageComponent implements OnInit {
       })
   }
 
+  deletePicture(pictureName: string){
+    this.pictureService.deletePictureFromAlbum(pictureName).subscribe(
+      result => {
+        if(result != 0){
+          this.alertService.error("Picture was not deleted");
+        } else {
+          this.alertService.success("Picture was deleted");
+          //refresh picture list after deletion
+          this.pictureService.getPicturesOfAlbum(localStorage.getItem("currentAlbum")).subscribe(
+            pictures => {
+              this.pictureList = pictures;
+            }
+          );
+        }
+      }
+    );
+  }
+
 }
