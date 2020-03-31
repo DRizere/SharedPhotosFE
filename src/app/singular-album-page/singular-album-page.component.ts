@@ -36,13 +36,17 @@ export class SingularAlbumPageComponent implements OnInit {
       this.alertService.error("Please select an album");
       this.router.navigate(["albums"]);
     }
+    document.getElementById("currentAlbumHeader").innerHTML ="Current Album: " + localStorage.getItem("currentAlbum");
     this.pictureForm = this.formBuilder.group({
-      pictureName: ['', Validators.required]
+      pictureName: ['', Validators.required],
+      pictureUp: ['', Validators.required]
     });
 
+    this.loading = true;
     this.pictureService.getPicturesOfAlbum(localStorage.getItem("currentAlbum")).subscribe(
       pictures => {
         this.pictureList = pictures;
+        this.loading = false;
       }
     );
 
@@ -70,6 +74,13 @@ export class SingularAlbumPageComponent implements OnInit {
 
   onSubmit(){
     //call to pictureService
+    this.submitted = true;
+    this.alertService.clear();
+
+    if(this.pictureForm.invalid){
+      return;
+    }
+
     this.loading = true;
     this.pictureService.pushPictureToAlbum(this.f.pictureName.value,this.fileToUpload.base64Encoding,this.fileToUpload.pictureExtension)
       .subscribe(data => {
@@ -78,9 +89,16 @@ export class SingularAlbumPageComponent implements OnInit {
           this.alertService.error("Account does not exist, please try again or register a new account.");
         } else {
           //handle successful login here
-          this.loading=false;
+          this.pictureService.getPicturesOfAlbum(localStorage.getItem("currentAlbum")).subscribe(
+            pictures => {
+              this.pictureList = pictures;
+              this.loading = false;
+            }
+          );
           this.alertService.success("Picture uploaded");
-          window.location.reload();
+          //window.location.reload();
+          this.submitted = false;
+          this.pictureForm.reset();
         }
       },
       error => {
@@ -90,16 +108,20 @@ export class SingularAlbumPageComponent implements OnInit {
   }
 
   deletePicture(pictureName: string){
+    this.loading=true;
     this.pictureService.deletePictureFromAlbum(pictureName).subscribe(
       result => {
+        console.log(result);
         if(result != 0){
           this.alertService.error("Picture was not deleted");
+          this.loading=false;
         } else {
           this.alertService.success("Picture was deleted");
           //refresh picture list after deletion
           this.pictureService.getPicturesOfAlbum(localStorage.getItem("currentAlbum")).subscribe(
             pictures => {
               this.pictureList = pictures;
+              this.loading=false;
             }
           );
         }

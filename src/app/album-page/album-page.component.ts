@@ -33,9 +33,11 @@ export class AlbumPageComponent implements OnInit {
       albumName: ['', Validators.required]
     });
 
+    this.loading = true;
     this.albumService.fetchAlbums().subscribe(
       albums => {
         this.albumList = albums;
+        this.loading = false;
       }
     );
   }
@@ -45,6 +47,14 @@ export class AlbumPageComponent implements OnInit {
   }
 
   onSubmit(){
+    this.submitted = true;
+    this.alertService.clear();
+
+    if(this.albumForm.invalid){
+      return;
+    }
+
+    this.loading = true;
     this.albumService.checkAlbumExistance(this.f.albumName.value)
       .subscribe(existance => {
         if(existance === 1){
@@ -58,12 +68,14 @@ export class AlbumPageComponent implements OnInit {
                 this.albumService.fetchAlbums().subscribe(
                   albums => {
                     this.albumList = albums;
+                    this.loading = false;
                   });
               } else {
                 this.alertService.error("Album was not created");
                 this.albumService.fetchAlbums().subscribe(
                   albums => {
                     this.albumList = albums;
+                    this.loading = false;
                   });
               }
             })
@@ -76,6 +88,7 @@ export class AlbumPageComponent implements OnInit {
   }
 
   deleteAlbum(albumName: string){
+    this.loading = true;
     this.albumService.deleteAlbum(albumName).subscribe(
       result => {
         if(result != 0){
@@ -86,6 +99,7 @@ export class AlbumPageComponent implements OnInit {
           this.albumService.fetchAlbums().subscribe(
             albums => {
               this.albumList = albums;
+              this.loading = false;
             }
           );
         }
