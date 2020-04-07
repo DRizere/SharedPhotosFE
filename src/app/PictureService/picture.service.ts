@@ -17,7 +17,8 @@ export class PictureService {
   private imagesUrl = 'https://infinite-coast-90564.herokuapp.com/images/'; //URL to accounts API, config later
   
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json'})
+    headers: new HttpHeaders({ 'Content-Type': 'application/json'}),
+    'UUIDSK': localStorage.getItem("SPDKSessionKey")
   };
 
   constructor(

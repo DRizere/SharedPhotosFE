@@ -17,7 +17,10 @@ export class AlbumService {
   private albumsUrl = 'https://infinite-coast-90564.herokuapp.com/albums/'; //URL to accounts API, config later
   
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json'})
+    headers: new HttpHeaders({ 
+      'Content-Type': 'application/json',
+      'UUIDSK': localStorage.getItem("SPDKSessionKey")
+    })
   };
 
   constructor(

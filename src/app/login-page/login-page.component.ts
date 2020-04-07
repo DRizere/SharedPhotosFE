@@ -29,7 +29,8 @@ export class LoginPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
-      username: ['', Validators.required]
+      username: ['', Validators.required],
+      password: ['', Validators.required]
     });
 
     if(localStorage.getItem("currentAccount") != null){
@@ -49,7 +50,7 @@ export class LoginPageComponent implements OnInit {
 
     this.loading = true;
 
-    this.accountService.login(this.f.username.value)
+    this.accountService.login(this.f.username.value, this.f.password.value)
       .subscribe(data => {
         if(data == null){
           this.loading=false;

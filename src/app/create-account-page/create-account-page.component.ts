@@ -31,6 +31,7 @@ export class CreateAccountPageComponent implements OnInit {
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
+      password: ['', Validators.required],
       name: ['', Validators.required],
       email: ['', Validators.required]
     });
@@ -58,9 +59,9 @@ export class CreateAccountPageComponent implements OnInit {
         if(existance === 1){
           this.alertService.error("An account with that username already exists.");
         } else {
-          this.accountService.createAccount(this.f.username.value, this.f.name.value, this.f.email.value)
+          this.accountService.createAccount(this.f.username.value, this.f.name.value, this.f.email.value, this.f.password.value)
             .subscribe(account => {
-              this.accountService.login(this.f.username.value)
+              this.accountService.login(this.f.username.value, this.f.password.value)
                 .subscribe(loginRes => {
                   if(loginRes == null){
                     this.loading=false;

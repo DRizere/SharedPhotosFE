@@ -23,17 +23,20 @@ export class AccountService {
   ) { 
   }
 
-  login(username: string) {
+  login(username: string, password: string) {
     const requestBody = 
     `{
-      "accountName" : "${username}"
+      "accountName" : "${username}",
+      "accountPass" : "${password}"
+
     }`;
-    return this.http.post<Account>(this.accountsUrl+'read', requestBody, this.httpOptions)
+    return this.http.post<Account>(this.accountsUrl+'login', requestBody, this.httpOptions)
       .pipe(
-        map(account => {
-          if(account[0] != null){
-            localStorage.setItem('currentAccount', account[0].accountName);
-            return account;
+        map(sessionkey => {
+          if(sessionkey[0] != null){
+            localStorage.setItem('currentAccount', username);
+            localStorage.setItem('SPDKSessionKey', sessionkey[0]);
+            return sessionkey;
           } else {
             return null;
           }
@@ -43,6 +46,7 @@ export class AccountService {
 
   logout(){
     localStorage.removeItem('currentAccount');
+    localStorage.removeItem('SPDKSessionKey');
   }
 
   checkAccountExistance(username: string){
@@ -60,10 +64,11 @@ export class AccountService {
       );
   }
 
-  createAccount(username: string, name: string, email: string) {
+  createAccount(username: string, name: string, email: string, password: string) {
     const requestBody = 
     `{
       "accountName" : "${username}",
+      "accountPass" : "${password}",
       "accountOwner" : "${name}",
       "email" : "${email}",
       "roleType" : "user"
