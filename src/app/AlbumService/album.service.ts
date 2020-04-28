@@ -5,6 +5,8 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 
 import { Album } from '../album';
 import {catchError, map, tap } from 'rxjs/operators';
+import { Local } from 'protractor/built/driverProviders';
+import { Utils } from '../utils';
 
 
 @Injectable({
@@ -15,13 +17,6 @@ export class AlbumService {
   //private albumsUrl = 'http://35.235.110.62:80/albums/'; //URL to accounts API, config later
 
   private albumsUrl = 'https://infinite-coast-90564.herokuapp.com/albums/'; //URL to accounts API, config later
-  
-  httpOptions = {
-    headers: new HttpHeaders({ 
-      'Content-Type': 'application/json',
-      'UUIDSK': localStorage.getItem("SPDKSessionKey")
-    })
-  };
 
   constructor(
     private http: HttpClient
@@ -32,7 +27,7 @@ export class AlbumService {
     `{
       "accountName" : "${localStorage.getItem("currentAccount")}"
     }`;
-    return this.http.post<Album[]>(this.albumsUrl+'read', requestBody, this.httpOptions)
+    return this.http.post<Album[]>(this.albumsUrl+'read', requestBody,  Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
       .pipe(
         map(albums => {
           if(albums != null){
@@ -49,7 +44,7 @@ export class AlbumService {
     `{
       "accountName" : "${localStorage.getItem("currentAccount")}"
     }`;
-    return this.http.post<any>(this.albumsUrl+'read', requestBodyCheckExistance, this.httpOptions)
+    return this.http.post<any>(this.albumsUrl+'read', requestBodyCheckExistance,  Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
       .pipe(
         map(albums => {
           for (let currAlbum of albums){
@@ -57,6 +52,7 @@ export class AlbumService {
               return 1;
             }
           }
+          return 0;
         })
       );
   }
@@ -67,7 +63,7 @@ export class AlbumService {
       "accountName" : "${localStorage.getItem("currentAccount")}",
       "albumName" : "${albumName}"
     }`;
-    return this.http.post<any>(this.albumsUrl+'create', requestBody, this.httpOptions)
+    return this.http.post<any>(this.albumsUrl+'create', requestBody,  Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
       .pipe(
         map(result => {
           return result;
@@ -81,7 +77,7 @@ export class AlbumService {
       "accountName" : "${localStorage.getItem("currentAccount")}",
       "albumName" : "${albumName}"
     }`;
-    return this.http.post<any>(this.albumsUrl+'delete', requestBody, this.httpOptions)
+    return this.http.post<any>(this.albumsUrl+'delete', requestBody,  Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
       .pipe(
         map(result => {
           return result;

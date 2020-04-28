@@ -12,6 +12,8 @@ import { LoginPageComponent } from './login-page/login-page.component';
 import { AlertComponent } from './alert/alert.component';
 import { AlbumPageComponent } from './album-page/album-page.component';
 import { SingularAlbumPageComponent } from './singular-album-page/singular-album-page.component';
+import { GroupManagementComponent } from './group-management/group-management.component';
+import { GroupViewerComponent } from './group-viewer/group-viewer.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { SingularAlbumPageComponent } from './singular-album-page/singular-album
     LoginPageComponent,
     AlertComponent,
     AlbumPageComponent,
-    SingularAlbumPageComponent
+    SingularAlbumPageComponent,
+    GroupManagementComponent,
+    GroupViewerComponent
   ],
   imports: [
     BrowserModule,

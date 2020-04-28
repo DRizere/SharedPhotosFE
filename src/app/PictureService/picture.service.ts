@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 
 import { Album } from '../album';
 import {catchError, map, tap } from 'rxjs/operators';
+import { Utils } from '../utils';
 
 
 @Injectable({
@@ -15,11 +16,6 @@ export class PictureService {
   //private albumsUrl = 'http://35.235.110.62:80/images/'; //URL to accounts API, config later
 
   private imagesUrl = 'https://infinite-coast-90564.herokuapp.com/images/'; //URL to accounts API, config later
-  
-  httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json'}),
-    'UUIDSK': localStorage.getItem("SPDKSessionKey")
-  };
 
   constructor(
     private http: HttpClient
@@ -32,7 +28,7 @@ export class PictureService {
       "albumName" : "${albumName}"
     }`;
     console.log(requestBody);
-    return this.http.post<any>(this.imagesUrl+'read', requestBody, this.httpOptions)
+    return this.http.post<any>(this.imagesUrl+'read', requestBody,  Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
       .pipe(
         map(result => {
           return result;
@@ -49,7 +45,7 @@ export class PictureService {
       "base64Encoding": "data:${pictureExtension};base64,${pictureEncoding}"
     }`;
     console.log(requestBody);
-    return this.http.post<any>(this.imagesUrl+'create', requestBody, this.httpOptions)
+    return this.http.post<any>(this.imagesUrl+'create', requestBody,  Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
       .pipe(
         map(result => {
           return result;
@@ -58,14 +54,14 @@ export class PictureService {
   }
 
   deletePictureFromAlbum(pictureName: string){
-    const requestBody = 
+    const requestBody = +
     `{
       "accountName" : "${localStorage.getItem("currentAccount")}",
       "albumName" : "${localStorage.getItem("currentAlbum")}",
       "pictureName" : "${pictureName}"
     }`;
     console.log(requestBody);
-    return this.http.post<any>(this.imagesUrl+'delete', requestBody, this.httpOptions)
+    return this.http.post<any>(this.imagesUrl+'delete', requestBody,  Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
       .pipe(
         map(result => {
           return result;

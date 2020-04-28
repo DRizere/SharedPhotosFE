@@ -4,6 +4,7 @@ import { AlbumService } from '../AlbumService/album.service';
 import { FormBuilder, FormGroup, Validators, Form } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertService } from '../AlertService/alert.service';
+import { AccountService } from '../AccountService/account.service';
 
 @Component({
   selector: 'app-album-page',
@@ -12,7 +13,7 @@ import { AlertService } from '../AlertService/alert.service';
 })
 export class AlbumPageComponent implements OnInit {
   albumForm: FormGroup;
-  loading = false;
+  loading = true;
   submitted = false;
 
   albumList: Album[];
@@ -21,7 +22,8 @@ export class AlbumPageComponent implements OnInit {
     private albumService: AlbumService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private accountService: AccountService
   ) { }
 
   ngOnInit(): void {
@@ -32,12 +34,21 @@ export class AlbumPageComponent implements OnInit {
     this.albumForm = this.formBuilder.group({
       albumName: ['', Validators.required]
     });
+    this.loadAlbums();
+  }
 
+  loadAlbums(){
     this.loading = true;
     this.albumService.fetchAlbums().subscribe(
       albums => {
-        this.albumList = albums;
-        this.loading = false;
+        if(albums===null){
+          this.alertService.error("Session Expired, Please login again.", true);
+          this.accountService.logout()
+          this.router.navigate(["login"]);
+        } else {
+          this.albumList = albums;
+          this.loading = false;
+        }
       }
     );
   }
@@ -72,11 +83,7 @@ export class AlbumPageComponent implements OnInit {
                   });
               } else {
                 this.alertService.error("Album was not created");
-                this.albumService.fetchAlbums().subscribe(
-                  albums => {
-                    this.albumList = albums;
-                    this.loading = false;
-                  });
+                this.loadAlbums();
               }
             })
         }
@@ -96,12 +103,7 @@ export class AlbumPageComponent implements OnInit {
         } else {
           this.alertService.success("Album was deleted");
           //refresh album list after deletion
-          this.albumService.fetchAlbums().subscribe(
-            albums => {
-              this.albumList = albums;
-              this.loading = false;
-            }
-          );
+          this.loadAlbums();
         }
       }
     );

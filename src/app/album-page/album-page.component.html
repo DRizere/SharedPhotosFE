@@ -1,13 +1,16 @@
 <p>You're logged in!</p>
 <h3>All current albums:</h3>
 <div *ngIf="loading" class="loader"></div>
-<ul *ngIf="loading!=true">
+<ng-container *ngIf="loading!=true && albumList!=null">
+<ul>
     <li *ngFor="let album of albumList">
         <a (click)="drilldown(album.albumName)" class="text-primary">{{album.albumName}}</a>
         - <a (click)="deleteAlbum(album.albumName)" class="text-danger">Delete</a>
     </li>
 </ul>
+</ng-container>
 <br>
+
 <h3>Create a new album:</h3>
 <form [formGroup]="albumForm" (ngSubmit)="onSubmit()">
     <div class="form-group">

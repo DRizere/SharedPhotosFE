@@ -8,7 +8,7 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="password">Username</label>
+        <label for="password">Password</label>
         <input type="password" minlength="8" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
         <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
             <div *ngIf="f.password.errors.required">Password is required</div>

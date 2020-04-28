@@ -6,6 +6,8 @@ import { Account } from '../account';
 
 import {catchError, map, tap } from 'rxjs/operators';
 
+import { Utils } from '../utils';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -13,10 +15,6 @@ export class AccountService {
 
   //private accountsUrl = 'http://35.235.110.62:80/accounts/'; //URL to accounts API, config later
   private accountsUrl = 'https://infinite-coast-90564.herokuapp.com/accounts/';
-
-  httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json'})
-  };
 
   constructor(
     private http: HttpClient
@@ -28,9 +26,8 @@ export class AccountService {
     `{
       "accountName" : "${username}",
       "accountPass" : "${password}"
-
     }`;
-    return this.http.post<Account>(this.accountsUrl+'login', requestBody, this.httpOptions)
+    return this.http.post<Account>(this.accountsUrl+'login', requestBody, Utils.buildDefaultHttpOptions())
       .pipe(
         map(sessionkey => {
           if(sessionkey[0] != null){
@@ -54,7 +51,7 @@ export class AccountService {
     `{
       "accountName" : "${username}"
     }`;
-    return this.http.post<Account>(this.accountsUrl+'read', checkExistRequestBody, this.httpOptions)
+    return this.http.post<Account>(this.accountsUrl+'read', checkExistRequestBody, Utils.buildDefaultHttpOptions())
       .pipe(
         map(account => {
           if(account[0] != null){ //account with that name already exists
@@ -73,7 +70,7 @@ export class AccountService {
       "email" : "${email}",
       "roleType" : "user"
     }`;
-    return this.http.post<Account>(this.accountsUrl+'create', requestBody, this.httpOptions)
+    return this.http.post<Account>(this.accountsUrl+'create', requestBody, Utils.buildDefaultHttpOptions())
     .pipe(
       map(account => {
         if(account != null){

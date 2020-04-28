@@ -28,7 +28,16 @@ export class CreateAccountPageComponent implements OnInit {
     return this.loginForm.controls;
   }
 
+  loggedInCheck(){
+    if(localStorage.getItem("currentAccount") != null){
+      this.alertService.success("You are still logged in");
+      this.router.navigate(["albums"]);
+    };
+  }
+
   ngOnInit(): void {
+    this.loggedInCheck();
+
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required],

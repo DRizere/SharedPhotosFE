@@ -33,7 +33,11 @@ export class LoginPageComponent implements OnInit {
       password: ['', Validators.required]
     });
 
-    if(localStorage.getItem("currentAccount") != null){
+    this.loggedInCheck();
+  }
+
+  loggedInCheck(){
+    if(localStorage.getItem("currentAccount") != null && localStorage.getItem("SPDKSessionKey")!=null){
       this.alertService.success("You are still logged in");
       this.router.navigate(["albums"]);
     };
@@ -52,12 +56,12 @@ export class LoginPageComponent implements OnInit {
 
     this.accountService.login(this.f.username.value, this.f.password.value)
       .subscribe(data => {
-        if(data == null){
+        if(!data){
           this.loading=false;
           this.alertService.error("Account does not exist, please try again or register a new account.");
         } else {
           //handle successful login here
-          this.router.navigate(["albums"]);
+          this.loggedInCheck();
         }
       },
       error => {
