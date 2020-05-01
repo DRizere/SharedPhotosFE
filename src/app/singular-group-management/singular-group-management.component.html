@@ -1,0 +1,37 @@
+<h2 id="currentGroupHeader"></h2>
+<br>
+
+<div *ngIf="loading" class="loader"></div>
+<div *ngIf="loading!=true">
+<h4 *ngIf="activeGroupmemberList.length>0">Current Members:</h4>
+<li *ngFor="let groupmember of activeGroupmemberList">
+    {{groupmember.accountName}} ({{groupmember.accountOwner}}) - 
+        <a (click)="remove(groupmember.accountName)" class="text-danger">Remove</a>
+</li>
+<br>
+<h4 *ngIf="pendingGroupmemberList.length>0">Pending Members:</h4>
+<li *ngFor="let groupmember of pendingGroupmemberList">
+    {{groupmember.accountName}} ({{groupmember.accountOwner}}) - 
+        <a (click)="remove(groupmember.accountName)" class="text-danger">Remove</a>
+</li>
+</div>
+
+<br>
+<br>
+<h3>Invite a new member:</h3>
+
+<form [formGroup]="groupmemberForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+        <label for="accountName">Account Name</label>
+        <input type="text" formControlName="accountName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.accountName.errors }" />
+        <div *ngIf="submitted && f.accountName.errors" class="invalid-feedback">
+            <div *ngIf="f.accountName.errors.required">Account Name is required</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <button [disabled]="loading" class="btn btn-primary">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Invite
+        </button>
+    </div>
+</form>

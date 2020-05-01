@@ -12,20 +12,20 @@ import { Utils } from '../utils';
 })
 export class GroupMemberService {
 
-  private groupsUrl = 'https://infinite-coast-90564.herokuapp.com/groups/'; //URL to accounts API, config later
+  private groupMemberUrl = 'https://infinite-coast-90564.herokuapp.com/groupmember/'; //URL to accounts API, config later
 
   constructor(
     private http: HttpClient
   ) { }
   
-  createGroup(groupOwner: string, groupName: string){
+  createGroupMember(accountName: string, groupName: string){
     const requestBody = 
     `{
-      "groupOwner" : "${groupOwner}",
+      "accountName" : "${accountName}",
       "groupName" : "${groupName}"
     }`;
     console.log(requestBody);
-    return this.http.post<any>(this.groupsUrl+'create', requestBody, Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
+    return this.http.post<any>(this.groupMemberUrl+'create', requestBody, Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
       .pipe(
         map(result => {
           return result;
@@ -33,13 +33,13 @@ export class GroupMemberService {
     );
   }
 
-  readGroups(groupOwner: string){
+  readGroupMembersByGroup(groupName: string){
     const requestBody = 
     `{
-      "groupOwner" : "${groupOwner}"
+      "groupName" : "${groupName}"
     }`;
     console.log(requestBody);
-    return this.http.post<any>(this.groupsUrl+'read', requestBody, Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
+    return this.http.post<any>(this.groupMemberUrl+'readbygroup', requestBody, Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
       .pipe(
         map(result => {
           return result;
@@ -47,14 +47,44 @@ export class GroupMemberService {
     );
   }
 
-  deleteGroup(groupName: string, groupOwner: string){
+  readGroupMembersByMember(accountName: string){
     const requestBody = 
     `{
-      "groupOwner" : "${groupOwner}",
-      "groupName" : "${groupName}"
+      "accountName" : "${accountName}"
     }`;
     console.log(requestBody);
-    return this.http.post<any>(this.groupsUrl+'delete', requestBody, Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
+    return this.http.post<any>(this.groupMemberUrl+'readbymember', requestBody, Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
+      .pipe(
+        map(result => {
+          return result;
+        })
+    );
+  }
+
+  deleteGroupMember(groupName: string, accountName: string){
+    const requestBody = 
+    `{
+      "groupName" : "${groupName}",
+      "accountName" : "${accountName}"
+    }`;
+    console.log(requestBody);
+    return this.http.post<any>(this.groupMemberUrl+'delete', requestBody, Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
+      .pipe(
+        map(result => {
+          return result;
+        })
+    );
+  }
+
+  updateGroupMember(groupName: string, accountName: string){
+    const requestBody = 
+    `{
+      "groupName" : "${groupName}",
+      "accountName" : "${accountName}",
+      "membershipStatus" : 1
+    }`;
+    console.log(requestBody);
+    return this.http.post<any>(this.groupMemberUrl+'update', requestBody, Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
       .pipe(
         map(result => {
           return result;

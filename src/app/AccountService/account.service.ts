@@ -30,7 +30,7 @@ export class AccountService {
     return this.http.post<Account>(this.accountsUrl+'login', requestBody, Utils.buildDefaultHttpOptions())
       .pipe(
         map(sessionkey => {
-          if(sessionkey[0] != null){
+          if(sessionkey !== null && sessionkey[0] !== null){
             localStorage.setItem('currentAccount', username);
             localStorage.setItem('SPDKSessionKey', sessionkey[0]);
             return sessionkey;

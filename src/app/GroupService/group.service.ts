@@ -62,5 +62,22 @@ export class GroupService {
     );
   }
 
+  checkGroupExistance(groupName: string){
+    const requestBodyCheckExistance = 
+    `{
+      "accountName" : "${localStorage.getItem("currentAccount")}"
+    }`;
+    return this.http.post<any>(this.groupsUrl+'read', requestBodyCheckExistance,  Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
+      .pipe(
+        map(groups => {
+          for (let currGroup of groups){
+            if(currGroup.groupName===groupName){
+              return 1;
+            }
+          }
+          return 0;
+        })
+      );
+  }
 
 }

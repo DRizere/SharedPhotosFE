@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators, Form } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertService } from '../AlertService/alert.service';
 import { AccountService } from '../AccountService/account.service';
+import { SessionCheckerService } from '../SessionCheckerService/session-checker.service';
 
 @Component({
   selector: 'app-album-page',
@@ -23,14 +24,24 @@ export class AlbumPageComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private alertService: AlertService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private sessionCheckerService: SessionCheckerService
   ) { }
 
   ngOnInit(): void {
     if(localStorage.getItem("currentAccount")==null){
-      this.alertService.error("Please log in");
+      this.alertService.error("Please log in", true);
       this.router.navigate(["login"]);
     }
+    this.sessionCheckerService.validateSession().subscribe(
+      result => {
+        if(result!=0){
+          this.alertService.error("Session expired. Please login again.", true);
+          this.accountService.logout();
+          this.router.navigate(["login"]);
+        }
+      }
+    )
     this.albumForm = this.formBuilder.group({
       albumName: ['', Validators.required]
     });
@@ -42,9 +53,7 @@ export class AlbumPageComponent implements OnInit {
     this.albumService.fetchAlbums().subscribe(
       albums => {
         if(albums===null){
-          this.alertService.error("Session Expired, Please login again.", true);
-          this.accountService.logout()
-          this.router.navigate(["login"]);
+          this.alertService.error("Something went wrong.", true);
         } else {
           this.albumList = albums;
           this.loading = false;
@@ -75,6 +84,7 @@ export class AlbumPageComponent implements OnInit {
             .subscribe(response => {
               if(response===0){
                 this.alertService.success("Album was created");
+                this.albumForm.reset();
                 //refresh album list after creation
                 this.albumService.fetchAlbums().subscribe(
                   albums => {

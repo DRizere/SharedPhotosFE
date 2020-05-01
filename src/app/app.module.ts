@@ -14,6 +14,8 @@ import { AlbumPageComponent } from './album-page/album-page.component';
 import { SingularAlbumPageComponent } from './singular-album-page/singular-album-page.component';
 import { GroupManagementComponent } from './group-management/group-management.component';
 import { GroupViewerComponent } from './group-viewer/group-viewer.component';
+import { YourGroupsComponent } from './your-groups/your-groups.component';
+import { SingularGroupManagementComponent } from './singular-group-management/singular-group-management.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { GroupViewerComponent } from './group-viewer/group-viewer.component';
     AlbumPageComponent,
     SingularAlbumPageComponent,
     GroupManagementComponent,
-    GroupViewerComponent
+    GroupViewerComponent,
+    YourGroupsComponent,
+    SingularGroupManagementComponent
   ],
   imports: [
     BrowserModule,

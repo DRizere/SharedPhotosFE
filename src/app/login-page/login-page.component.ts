@@ -38,7 +38,7 @@ export class LoginPageComponent implements OnInit {
 
   loggedInCheck(){
     if(localStorage.getItem("currentAccount") != null && localStorage.getItem("SPDKSessionKey")!=null){
-      this.alertService.success("You are still logged in");
+      this.alertService.success("You are still logged in", true);
       this.router.navigate(["albums"]);
     };
   }
@@ -58,10 +58,10 @@ export class LoginPageComponent implements OnInit {
       .subscribe(data => {
         if(!data){
           this.loading=false;
-          this.alertService.error("Account does not exist, please try again or register a new account.");
+          this.alertService.error("Login failed. Maybe your account doesn't exist or you entered the wrong password.");
         } else {
           //handle successful login here
-          this.loggedInCheck();
+          this.router.navigate(["albums"]);
         }
       },
       error => {

@@ -1,1 +1,29 @@
-<p>group-management works!</p>
+<p>You're logged in!</p>
+<h3>All current groups:</h3>
+<div *ngIf="loading" class="loader"></div>
+<ng-container *ngIf="loading!=true && groupList!=null">
+<ul>
+    <li *ngFor="let group of groupList">
+        <a (click)="drilldown(group.groupName)" class="text-primary">{{group.groupName}}</a>
+        - <a (click)="deleteGroup(group.groupName)" class="text-danger">Delete</a>
+    </li>
+</ul>
+</ng-container>
+<br>
+
+<h3>Create a new group:</h3>
+<form [formGroup]="groupForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+        <label for="groupName">Group Name</label>
+        <input type="text" formControlName="groupName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.groupName.errors }" />
+        <div *ngIf="submitted && f.groupName.errors" class="invalid-feedback">
+            <div *ngIf="f.groupName.errors.required">Group name is required</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <button [disabled]="loading" class="btn btn-primary">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Create
+        </button>
+    </div>
+</form>

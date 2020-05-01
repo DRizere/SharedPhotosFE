@@ -5,6 +5,8 @@ import { FormBuilder, FormGroup, Validators, Form } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertService } from '../AlertService/alert.service';
 import { PictureService } from '../PictureService/picture.service';
+import { AccountService } from '../AccountService/account.service';
+import { SessionCheckerService } from '../SessionCheckerService/session-checker.service';
 
 @Component({
   selector: 'app-singular-album-page',
@@ -24,7 +26,9 @@ export class SingularAlbumPageComponent implements OnInit {
     private pictureService: PictureService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private accountService: AccountService,
+    private sessionCheckerService: SessionCheckerService
     ) { }
 
   get f() {
@@ -36,6 +40,15 @@ export class SingularAlbumPageComponent implements OnInit {
       this.alertService.error("Please select an album");
       this.router.navigate(["albums"]);
     }
+    this.sessionCheckerService.validateSession().subscribe(
+      result => {
+        if(result!=0){
+          this.alertService.error("Session expired. Please login again.", true);
+          this.accountService.logout();
+          this.router.navigate(["login"]);
+        }
+      }
+    )
     document.getElementById("currentAlbumHeader").innerHTML ="Current Album: " + localStorage.getItem("currentAlbum");
     this.pictureForm = this.formBuilder.group({
       pictureName: ['', Validators.required],
