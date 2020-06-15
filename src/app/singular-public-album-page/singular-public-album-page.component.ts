@@ -9,11 +9,12 @@ import { AccountService } from '../AccountService/account.service';
 import { SessionCheckerService } from '../SessionCheckerService/session-checker.service';
 
 @Component({
-  selector: 'app-singular-album-page',
-  templateUrl: './singular-album-page.component.html',
-  styleUrls: ['./singular-album-page.component.css']
+  selector: 'app-singular-public-album-page',
+  templateUrl: './singular-public-album-page.component.html',
+  styleUrls: ['./singular-public-album-page.component.css']
 })
-export class SingularAlbumPageComponent implements OnInit {
+export class SingularPublicAlbumPageComponent implements OnInit {
+
   pictureForm: FormGroup;
   loading = false;
   submitted = false;
@@ -36,29 +37,19 @@ export class SingularAlbumPageComponent implements OnInit {
   }
 
   ngOnInit(): void { 
-    if(localStorage.getItem("currentAlbum")==null){
+    if(localStorage.getItem("currentPublicAlbum")==null || localStorage.getItem("currentPublicAlbumAccount")==null){
       this.alertService.error("Please select an album");
-      this.router.navigate(["albums"]);
+      this.router.navigate(["public/albums"]);
       return;
     }
-    this.sessionCheckerService.validateSession().subscribe(
-      result => {
-        if(result!=0){
-          this.alertService.error("Session expired. Please login again.", true);
-          this.accountService.logout();
-          this.router.navigate(["login"]);
-          return;
-        }
-      }
-    )
-    document.getElementById("currentAlbumHeader").innerHTML ="Current Album: " + localStorage.getItem("currentAlbum");
+    document.getElementById("currentAlbumHeader").innerHTML ="Current Album: " + localStorage.getItem("currentPublicAlbum");
     this.pictureForm = this.formBuilder.group({
       pictureName: ['', Validators.required],
       pictureUp: ['', Validators.required]
     });
 
     this.loading = true;
-    this.pictureService.getPicturesOfAlbum(localStorage.getItem("currentAccount"), localStorage.getItem("currentAlbum")).subscribe(
+    this.pictureService.getPublicPicturesOfAlbum(localStorage.getItem("currentPublicAlbumAccount"), localStorage.getItem("currentPublicAlbum")).subscribe(
       pictures => {
         this.pictureList = pictures;
         this.loading = false;
@@ -88,7 +79,11 @@ export class SingularAlbumPageComponent implements OnInit {
   }
 
   onSubmit(){
-    //call to pictureService
+    if(localStorage.getItem("currentPublicAlbumAccount")!=="GuestAccount" && localStorage.getItem("currentAccount")!==localStorage.getItem("currentPublicAlbumAccount")){
+      this.alertService.error("You do not have permission to add pictures to this album.");
+      window.scroll(0,0);
+      return;
+    }
     this.submitted = true;
     this.alertService.clear();
 
@@ -97,14 +92,14 @@ export class SingularAlbumPageComponent implements OnInit {
     }
 
     this.loading = true;
-    this.pictureService.pushPictureToAlbum(localStorage.getItem("currentAccount"), localStorage.getItem("currentAlbum"), this.f.pictureName.value,this.fileToUpload.base64Encoding,this.fileToUpload.pictureExtension)
+    this.pictureService.pushPublicPictureToAlbum(localStorage.getItem("currentAccount"), localStorage.getItem("currentPublicAlbum"), this.f.pictureName.value,this.fileToUpload.base64Encoding,this.fileToUpload.pictureExtension)
       .subscribe(data => {
         if(data != 0){
           this.loading=false;
           this.alertService.error("Account does not exist, please try again or register a new account.");
         } else {
           //handle successful login here
-          this.pictureService.getPicturesOfAlbum(localStorage.getItem("currentAccount"), localStorage.getItem("currentAlbum")).subscribe(
+          this.pictureService.getPublicPicturesOfAlbum(localStorage.getItem("currentPublicAlbumAccount"), localStorage.getItem("currentPublicAlbum")).subscribe(
             pictures => {
               this.pictureList = pictures;
               this.loading = false;
@@ -123,8 +118,13 @@ export class SingularAlbumPageComponent implements OnInit {
   }
 
   deletePicture(pictureName: string){
+    if(localStorage.getItem("currentPublicAlbumAccount")!=="GuestAccount" && localStorage.getItem("currentAccount")!==localStorage.getItem("currentPublicAlbumAccount")){
+      this.alertService.error("You do not have permission to delete pictures from this album.");
+      window.scroll(0,0);
+      return;
+    }
     this.loading=true;
-    this.pictureService.deletePictureFromAlbum(localStorage.getItem("currentAccount"), localStorage.getItem("currentAlbum"), pictureName).subscribe(
+    this.pictureService.deletePublicPictureFromAlbum(localStorage.getItem("currentAccount"), localStorage.getItem("currentPublicAlbum"), pictureName).subscribe(
       result => {
         if(result != 0){
           this.alertService.error("Picture was not deleted");
@@ -132,7 +132,7 @@ export class SingularAlbumPageComponent implements OnInit {
         } else {
           this.alertService.success("Picture was deleted");
           //refresh picture list after deletion
-          this.pictureService.getPicturesOfAlbum(localStorage.getItem("currentAccount"), localStorage.getItem("currentAlbum")).subscribe(
+          this.pictureService.getPublicPicturesOfAlbum(localStorage.getItem("currentPublicAlbumAccount"), localStorage.getItem("currentPublicAlbum")).subscribe(
             pictures => {
               this.pictureList = pictures;
               this.loading=false;

@@ -70,17 +70,12 @@ export class CreateAccountPageComponent implements OnInit {
         } else {
           this.accountService.createAccount(this.f.username.value, this.f.name.value, this.f.email.value, this.f.password.value)
             .subscribe(account => {
-              this.accountService.login(this.f.username.value, this.f.password.value)
-                .subscribe(loginRes => {
-                  if(loginRes == null){
-                    this.loading=false;
-                    this.alertService.error("Account creation failed.");
-                  } else {
-                    //handle successful login here
-                    this.loading=false;
-                    this.router.navigate(["albums"]);
-                  }
-                })
+              if(account==0){
+                this.alertService.success("Account created!", true);
+                this.router.navigate(["login"]);
+              } else {
+                this.alertService.error("Account creation failed");
+              }
             },
             error => {
               console.error(error);

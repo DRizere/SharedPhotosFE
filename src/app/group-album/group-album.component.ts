@@ -9,11 +9,11 @@ import { AccountService } from '../AccountService/account.service';
 import { SessionCheckerService } from '../SessionCheckerService/session-checker.service';
 
 @Component({
-  selector: 'app-singular-album-page',
-  templateUrl: './singular-album-page.component.html',
-  styleUrls: ['./singular-album-page.component.css']
+  selector: 'app-group-album',
+  templateUrl: './group-album.component.html',
+  styleUrls: ['./group-album.component.css']
 })
-export class SingularAlbumPageComponent implements OnInit {
+export class GroupAlbumComponent implements OnInit {
   pictureForm: FormGroup;
   loading = false;
   submitted = false;
@@ -36,7 +36,7 @@ export class SingularAlbumPageComponent implements OnInit {
   }
 
   ngOnInit(): void { 
-    if(localStorage.getItem("currentAlbum")==null){
+    if(localStorage.getItem("currentGroupAlbum")==null){
       this.alertService.error("Please select an album");
       this.router.navigate(["albums"]);
       return;
@@ -51,14 +51,14 @@ export class SingularAlbumPageComponent implements OnInit {
         }
       }
     )
-    document.getElementById("currentAlbumHeader").innerHTML ="Current Album: " + localStorage.getItem("currentAlbum");
+    document.getElementById("currentAlbumHeader").innerHTML ="Current Album: " + localStorage.getItem("currentGroupAlbum");
     this.pictureForm = this.formBuilder.group({
       pictureName: ['', Validators.required],
       pictureUp: ['', Validators.required]
     });
 
     this.loading = true;
-    this.pictureService.getPicturesOfAlbum(localStorage.getItem("currentAccount"), localStorage.getItem("currentAlbum")).subscribe(
+    this.pictureService.getPicturesOfAlbum(localStorage.getItem("currentMemberGroup"), localStorage.getItem("currentGroupAlbum")).subscribe(
       pictures => {
         this.pictureList = pictures;
         this.loading = false;
@@ -97,14 +97,14 @@ export class SingularAlbumPageComponent implements OnInit {
     }
 
     this.loading = true;
-    this.pictureService.pushPictureToAlbum(localStorage.getItem("currentAccount"), localStorage.getItem("currentAlbum"), this.f.pictureName.value,this.fileToUpload.base64Encoding,this.fileToUpload.pictureExtension)
+    this.pictureService.pushPictureToAlbum(localStorage.getItem("currentMemberGroup"), localStorage.getItem("currentGroupAlbum"), this.f.pictureName.value,this.fileToUpload.base64Encoding,this.fileToUpload.pictureExtension)
       .subscribe(data => {
         if(data != 0){
           this.loading=false;
           this.alertService.error("Account does not exist, please try again or register a new account.");
         } else {
           //handle successful login here
-          this.pictureService.getPicturesOfAlbum(localStorage.getItem("currentAccount"), localStorage.getItem("currentAlbum")).subscribe(
+          this.pictureService.getPicturesOfAlbum(localStorage.getItem("currentMemberGroup"), localStorage.getItem("currentGroupAlbum")).subscribe(
             pictures => {
               this.pictureList = pictures;
               this.loading = false;
@@ -124,7 +124,7 @@ export class SingularAlbumPageComponent implements OnInit {
 
   deletePicture(pictureName: string){
     this.loading=true;
-    this.pictureService.deletePictureFromAlbum(localStorage.getItem("currentAccount"), localStorage.getItem("currentAlbum"), pictureName).subscribe(
+    this.pictureService.deletePictureFromAlbum(localStorage.getItem("currentMemberGroup"), localStorage.getItem("currentGroupAlbum"), pictureName).subscribe(
       result => {
         if(result != 0){
           this.alertService.error("Picture was not deleted");
@@ -132,7 +132,7 @@ export class SingularAlbumPageComponent implements OnInit {
         } else {
           this.alertService.success("Picture was deleted");
           //refresh picture list after deletion
-          this.pictureService.getPicturesOfAlbum(localStorage.getItem("currentAccount"), localStorage.getItem("currentAlbum")).subscribe(
+          this.pictureService.getPicturesOfAlbum(localStorage.getItem("currentMemberGroup"), localStorage.getItem("currentGroupAlbum")).subscribe(
             pictures => {
               this.pictureList = pictures;
               this.loading=false;

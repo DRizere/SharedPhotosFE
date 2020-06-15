@@ -34,9 +34,10 @@ export class SingularGroupManagementComponent implements OnInit {
   }
 
   ngOnInit(): void { 
-    if(localStorage.getItem("currentGroup")==null){
+    if(localStorage.getItem("currentManagingGroup")==null){
       this.alertService.error("Please select a group");
       this.router.navigate(["group-management"]); 
+      return;
     }
     this.sessionCheckerService.validateSession().subscribe(
       result => {
@@ -44,26 +45,29 @@ export class SingularGroupManagementComponent implements OnInit {
           this.alertService.error("Session expired. Please login again.", true);
           this.accountService.logout();
           this.router.navigate(["login"]);
+          return;
         }
       }
     )
-    document.getElementById("currentGroupHeader").innerHTML ="Current Group: " + localStorage.getItem("currentGroup");
+    document.getElementById("currentGroupHeader").innerHTML ="Selected Group: " + localStorage.getItem("currentManagingGroup");
     this.groupmemberForm = this.formBuilder.group({
       accountName: ['', Validators.required],
     });
 
     this.loading = true;
-    this.groupMemberService.readGroupMembersByGroup(localStorage.getItem("currentGroup")).subscribe(
+    this.groupMemberService.readGroupMembersByGroup(localStorage.getItem("currentManagingGroup")).subscribe(
       groupMembers => {
         this.activeGroupmemberList=[];
         this.pendingGroupmemberList=[];
-        groupMembers.forEach(element => {
-          if(element.memberShipStatus == 1){
-            this.activeGroupmemberList.push(element);
-          } else {
-            this.pendingGroupmemberList.push(element);
-          }
-        });
+        if(groupMembers != null){
+          groupMembers.forEach(element => {
+            if(element.membershipStatus == 1){
+              this.activeGroupmemberList.push(element);
+            } else {
+              this.pendingGroupmemberList.push(element);
+            }
+          });
+        }
         this.loading = false; 
       }
     );
@@ -79,18 +83,18 @@ export class SingularGroupManagementComponent implements OnInit {
     }
 
     this.loading = true;
-    this.groupMemberService.createGroupMember(this.f.accountName.value, localStorage.getItem("currentGroup"))
+    this.groupMemberService.createGroupMember(this.f.accountName.value, localStorage.getItem("currentManagingGroup"))
       .subscribe(data => {
         if(data != 0){
           this.loading=false;
           this.alertService.error("That account doesn't exist or is already a member of this group.");
         } else {
-          this.groupMemberService.readGroupMembersByGroup(localStorage.getItem("currentGroup")).subscribe(
+          this.groupMemberService.readGroupMembersByGroup(localStorage.getItem("currentManagingGroup")).subscribe(
             groupMembers => {
               this.activeGroupmemberList=[];
               this.pendingGroupmemberList=[];
               groupMembers.forEach(element => {
-                if(element.memberShipStatus === 1){
+                if(element.membershipStatus === 1){
                   this.activeGroupmemberList.push(element);
                 } else {
                   this.pendingGroupmemberList.push(element);
@@ -112,22 +116,26 @@ export class SingularGroupManagementComponent implements OnInit {
   }
 
   remove(accountName: string){
+    if(accountName === localStorage.getItem("currentAccount")){
+      this.alertService.error("You cannot remove yourself from a group you are the owner of.");
+      return;
+    }
+
     this.loading=true;
-    this.groupMemberService.deleteGroupMember(localStorage.getItem("currentGroup"), accountName).subscribe(
+    this.groupMemberService.deleteGroupMember(localStorage.getItem("currentManagingGroup"), accountName).subscribe(
       result => {
-        console.log(result);
         if(result != 0){
           this.alertService.error("Groupmember was not removed");
           this.loading=false;
         } else {
           this.alertService.success("Groupmember was removed");
           //refresh picture list after deletion
-          this.groupMemberService.readGroupMembersByGroup(localStorage.getItem("currentGroup")).subscribe(
+          this.groupMemberService.readGroupMembersByGroup(localStorage.getItem("currentManagingGroup")).subscribe(
             groupMembers => {
               this.activeGroupmemberList=[];
               this.pendingGroupmemberList=[];
               groupMembers.forEach(element => {
-                if(element.memberShipStatus === 1){
+                if(element.membershipStatus === 1){
                   this.activeGroupmemberList.push(element);
                 } else {
                   this.pendingGroupmemberList.push(element);

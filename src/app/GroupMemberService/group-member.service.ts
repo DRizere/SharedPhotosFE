@@ -24,11 +24,12 @@ export class GroupMemberService {
       "accountName" : "${accountName}",
       "groupName" : "${groupName}"
     }`;
-    console.log(requestBody);
     return this.http.post<any>(this.groupMemberUrl+'create', requestBody, Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
       .pipe(
         map(result => {
-          return result;
+          if(result != null){
+            return result[0];
+          }
         })
     );
   }
@@ -38,7 +39,6 @@ export class GroupMemberService {
     `{
       "groupName" : "${groupName}"
     }`;
-    console.log(requestBody);
     return this.http.post<any>(this.groupMemberUrl+'readbygroup', requestBody, Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
       .pipe(
         map(result => {
@@ -52,7 +52,6 @@ export class GroupMemberService {
     `{
       "accountName" : "${accountName}"
     }`;
-    console.log(requestBody);
     return this.http.post<any>(this.groupMemberUrl+'readbymember', requestBody, Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
       .pipe(
         map(result => {
@@ -67,27 +66,29 @@ export class GroupMemberService {
       "groupName" : "${groupName}",
       "accountName" : "${accountName}"
     }`;
-    console.log(requestBody);
     return this.http.post<any>(this.groupMemberUrl+'delete', requestBody, Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
       .pipe(
         map(result => {
-          return result;
+          if(result != null){
+            return result[0];
+          }
         })
     );
   }
 
-  updateGroupMember(groupName: string, accountName: string){
+  updateGroupMember(groupName: string, accountName: string, membershipStatus: number){
     const requestBody = 
     `{
       "groupName" : "${groupName}",
       "accountName" : "${accountName}",
-      "membershipStatus" : 1
+      "membershipStatus" : ${membershipStatus}
     }`;
-    console.log(requestBody);
     return this.http.post<any>(this.groupMemberUrl+'update', requestBody, Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
       .pipe(
         map(result => {
-          return result;
+          if(result != null){
+            return result[0];
+          }
         })
     );
   }

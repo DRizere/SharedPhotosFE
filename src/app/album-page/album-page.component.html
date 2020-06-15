@@ -1,10 +1,33 @@
-<p>You're logged in!</p>
-<h3>All current albums:</h3>
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Sharing Settings</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div *ngIf="modalLoading" class="loader"></div>
+    <ng-container *ngIf="modalLoading!=true">
+    <ul>
+        <li *ngFor="let shared of selectedAlbumAllowedGroups">
+            {{shared.groupName}} - <a (click)=revokeShare(shared.groupName) class="text-primary">Revoke Sharing</a>
+        </li>
+        <li *ngFor="let private of selectedAlbumDeniedGroups">
+            {{private.groupName}} - <a (click)=allowShare(private.groupName) class="text-primary">Allow Sharing</a>
+        </li>
+    </ul>
+    </ng-container>
+
+</ng-template>
+
+<h3>Your albums:</h3>
 <div *ngIf="loading" class="loader"></div>
 <ng-container *ngIf="loading!=true && albumList!=null">
 <ul>
     <li *ngFor="let album of albumList">
         <a (click)="drilldown(album.albumName)" class="text-primary">{{album.albumName}}</a>
+        - <a *ngIf="album.publicStatus == 0" (click)="makePublicAlbum(album.albumName)" class="text-primary">Make Public</a>
+        <a *ngIf="album.publicStatus == 1" (click)="makePrivateAlbum(album.albumName)" class="text-primary">Make Private</a>
+        - <a (click)="open(content, album.albumName)" class="text-primary">Sharing Settings</a>
         - <a (click)="deleteAlbum(album.albumName)" class="text-danger">Delete</a>
     </li>
 </ul>

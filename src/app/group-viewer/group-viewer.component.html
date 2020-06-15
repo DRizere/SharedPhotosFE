@@ -1,1 +1,12 @@
-<p>group-viewer works!</p>
+<h2 id="currentMemberGroupHeader"></h2>
+
+<h3>This group's albums:</h3>
+<div *ngIf="loading" class="loader"></div>
+<ng-container *ngIf="loading!=true && albumList!=null">
+<ul>
+    <li *ngFor="let album of albumList">
+        <a (click)="drilldown(album.albumName)" class="text-primary">{{album.albumName}}</a>
+    </li>
+</ul>
+</ng-container>
+<br> 

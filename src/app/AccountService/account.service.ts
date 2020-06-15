@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 
 import { Account } from '../account';
@@ -27,13 +27,13 @@ export class AccountService {
       "accountName" : "${username}",
       "accountPass" : "${password}"
     }`;
-    return this.http.post<Account>(this.accountsUrl+'login', requestBody, Utils.buildDefaultHttpOptions())
+    return this.http.post<HttpResponse<String>>(this.accountsUrl+'login', requestBody, Utils.buildDefaultHttpOptions())
       .pipe(
-        map(sessionkey => {
-          if(sessionkey !== null && sessionkey[0] !== null){
+        map(response => {
+          if(response !== null && response[0] !== null){
             localStorage.setItem('currentAccount', username);
-            localStorage.setItem('SPDKSessionKey', sessionkey[0]);
-            return sessionkey;
+            localStorage.setItem('SPDKSessionKey', response[0]);
+            return 0;
           } else {
             return null;
           }
@@ -53,9 +53,11 @@ export class AccountService {
     }`;
     return this.http.post<Account>(this.accountsUrl+'read', checkExistRequestBody, Utils.buildDefaultHttpOptions())
       .pipe(
-        map(account => {
-          if(account[0] != null){ //account with that name already exists
+        map(response => {
+          if(response[0] != null){ //account with that name already exists
             return 1;
+          } else {
+            return 0;
           }
         })
       );
@@ -70,11 +72,11 @@ export class AccountService {
       "email" : "${email}",
       "roleType" : "user"
     }`;
-    return this.http.post<Account>(this.accountsUrl+'create', requestBody, Utils.buildDefaultHttpOptions())
+    return this.http.post(this.accountsUrl+'create', requestBody, Utils.buildDefaultHttpOptions())
     .pipe(
-      map(account => {
-        if(account != null){
-          return account;
+      map(response => {
+        if(response != null){
+          return response[0];
         }
       })
     );

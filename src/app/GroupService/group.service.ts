@@ -24,7 +24,6 @@ export class GroupService {
       "groupOwner" : "${groupOwner}",
       "groupName" : "${groupName}"
     }`;
-    console.log(requestBody);
     return this.http.post<any>(this.groupsUrl+'create', requestBody, Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
       .pipe(
         map(result => {
@@ -38,7 +37,6 @@ export class GroupService {
     `{
       "groupOwner" : "${groupOwner}"
     }`;
-    console.log(requestBody);
     return this.http.post<any>(this.groupsUrl+'read', requestBody, Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
       .pipe(
         map(result => {
@@ -53,7 +51,6 @@ export class GroupService {
       "groupOwner" : "${groupOwner}",
       "groupName" : "${groupName}"
     }`;
-    console.log(requestBody);
     return this.http.post<any>(this.groupsUrl+'delete', requestBody, Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
       .pipe(
         map(result => {

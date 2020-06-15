@@ -23,7 +23,9 @@ export class SessionCheckerService {
     return this.http.post<any>(this.groupMemberUrl, null, Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
       .pipe(
         map(result => {
-          return result;
+          if(result != null){
+            return result[0];
+          }
         })
     );
   }

@@ -33,6 +33,7 @@ export class GroupManagementComponent implements OnInit {
     if(localStorage.getItem("currentAccount")==null){
       this.alertService.error("Please log in", true);
       this.router.navigate(["login"]);
+      return;
     }
     this.sessionCheckerService.validateSession().subscribe(
       result => {
@@ -40,6 +41,7 @@ export class GroupManagementComponent implements OnInit {
           this.alertService.error("Session expired. Please login again.", true);
           this.accountService.logout();
           this.router.navigate(["login"]);
+          return;
         }
       }
     )
@@ -76,7 +78,7 @@ export class GroupManagementComponent implements OnInit {
     }
 
     this.loading = true;
-    this.groupService.checkGroupExistance(this.f.groupName.value)
+    this.accountService.checkAccountExistance(this.f.groupName.value)
       .subscribe(existance => {
         if(existance === 1){
           this.alertService.error("You already manage a group with that name.");
@@ -121,7 +123,7 @@ export class GroupManagementComponent implements OnInit {
   }
 
   drilldown(groupName: string){
-    localStorage.setItem("currentGroup", groupName);
+    localStorage.setItem("currentManagingGroup", groupName);
     this.router.navigate(["group-management/selected"]);
   }
 

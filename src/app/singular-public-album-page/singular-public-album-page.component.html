@@ -1,0 +1,36 @@
+<h2 id="currentAlbumHeader"></h2>
+<br>
+<br>
+
+<div *ngIf="loading" class="loader"></div>
+<ul *ngIf="loading!=true" >
+<li *ngFor="let picture of pictureList">
+    <img src="data:image/{{picture.pictureExtension}};base64,{{picture.base64Encoding}}" class="responsive"/>
+    <h3>{{picture.pictureName}} - 
+        <a (click)="deletePicture(picture.pictureName)" class="text-danger">Delete</a>
+    </h3>
+</li>
+</ul>
+<br>
+<h3>Add a new Picture:</h3>
+
+<form [formGroup]="pictureForm" (ngSubmit)="onSubmit()">
+    <input type='file' (change)="onSelectFile($event)" id="fileSelector" required formControlName="pictureUp" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.pictureUp.errors }" />
+    <div *ngIf="submitted && f.pictureUp.errors" class="invalid-feedback">
+        <div *ngIf="f.pictureUp.errors.required">Picture is required</div>
+    </div>
+    <p id="picreq"></p>
+    <div class="form-group">
+        <label for="pictureName">Picture Title</label>
+        <input type="text" formControlName="pictureName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.pictureName.errors }" />
+        <div *ngIf="submitted && f.pictureName.errors" class="invalid-feedback">
+            <div *ngIf="f.pictureName.errors.required">Picture Title is required</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <button [disabled]="loading" class="btn btn-primary">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Upload
+        </button>
+    </div>
+</form>

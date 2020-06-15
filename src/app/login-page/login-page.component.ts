@@ -56,7 +56,7 @@ export class LoginPageComponent implements OnInit {
 
     this.accountService.login(this.f.username.value, this.f.password.value)
       .subscribe(data => {
-        if(!data){
+        if(data==null){
           this.loading=false;
           this.alertService.error("Login failed. Maybe your account doesn't exist or you entered the wrong password.");
         } else {
@@ -68,10 +68,6 @@ export class LoginPageComponent implements OnInit {
         this.alertService.error(error);
         console.error(error);
       })
-  }
-
-  onLoginSuccess(){
-
   }
 
 }
