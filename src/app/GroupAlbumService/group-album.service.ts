@@ -23,7 +23,7 @@ export class GroupAlbumService {
     `{
       "albumName" : "${albumName}",
       "groupName" : "${groupName}",
-      "accountName": "${accountName}"
+      "accountName" : "${accountName}"
     }`;
     return this.http.post<any>(this.groupAlbumUrl+'create', requestBody, Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
       .pipe(
@@ -61,11 +61,11 @@ export class GroupAlbumService {
     );
   }
 
-  deleteGroupAlbum(groupName: string, albumName: string){
+  deleteGroupAlbum( albumName: string, groupName: string){
     const requestBody = 
     `{
-      "groupName" : "${groupName}",
-      "albumName" : "${albumName}"
+      "albumName" : "${albumName}",
+      "groupName" : "${groupName}"
     }`;
     return this.http.post<any>(this.groupAlbumUrl+'delete', requestBody, Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
       .pipe(

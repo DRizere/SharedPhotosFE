@@ -242,7 +242,7 @@ export class AlbumPageComponent implements OnInit {
   }
 
   revokeShare(groupName: string){
-    this.groupAlbumService.deleteGroupAlbum(groupName, this.currentModalAlbum).subscribe(
+    this.groupAlbumService.deleteGroupAlbum(this.currentModalAlbum, groupName).subscribe(
       result => {
         if(result == 0){    
           this.updateModal();
@@ -255,7 +255,7 @@ export class AlbumPageComponent implements OnInit {
   }
 
   allowShare(groupName: string){
-    this.groupAlbumService.createGroupAlbum(groupName, this.currentModalAlbum, localStorage.getItem("currentAccount")).subscribe(
+    this.groupAlbumService.createGroupAlbum(this.currentModalAlbum, groupName, localStorage.getItem("currentAccount")).subscribe(
       result => {
         if(result == 0){    
           this.updateModal();

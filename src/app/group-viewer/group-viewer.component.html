@@ -5,7 +5,7 @@
 <ng-container *ngIf="loading!=true && albumList!=null">
 <ul>
     <li *ngFor="let album of albumList">
-        <a (click)="drilldown(album.albumName)" class="text-primary">{{album.albumName}}</a>
+        <a (click)="drilldown(album.albumName, album.accountName)" class="text-primary">{{album.albumName}}</a>
     </li>
 </ul>
 </ng-container>

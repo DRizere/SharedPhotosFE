@@ -58,7 +58,7 @@ export class GroupAlbumComponent implements OnInit {
     });
 
     this.loading = true;
-    this.pictureService.getPicturesOfAlbum(localStorage.getItem("currentMemberGroup"), localStorage.getItem("currentGroupAlbum")).subscribe(
+    this.pictureService.getPicturesOfAlbum(localStorage.getItem("currentGroupAlbumAccount"), localStorage.getItem("currentGroupAlbum")).subscribe(
       pictures => {
         this.pictureList = pictures;
         this.loading = false;
@@ -88,7 +88,11 @@ export class GroupAlbumComponent implements OnInit {
   }
 
   onSubmit(){
-    //call to pictureService
+    if(localStorage.getItem("currentAccount")!==localStorage.getItem("currentGroupAlbumAccount")){
+      this.alertService.error("You do not have permission to add pictures to this album.");
+      window.scroll(0,0);
+      return;
+    }
     this.submitted = true;
     this.alertService.clear();
 
@@ -97,14 +101,14 @@ export class GroupAlbumComponent implements OnInit {
     }
 
     this.loading = true;
-    this.pictureService.pushPictureToAlbum(localStorage.getItem("currentMemberGroup"), localStorage.getItem("currentGroupAlbum"), this.f.pictureName.value,this.fileToUpload.base64Encoding,this.fileToUpload.pictureExtension)
+    this.pictureService.pushPublicPictureToAlbum(localStorage.getItem("currentAccount"), localStorage.getItem("currentGroupAlbum"), this.f.pictureName.value,this.fileToUpload.base64Encoding,this.fileToUpload.pictureExtension)
       .subscribe(data => {
         if(data != 0){
           this.loading=false;
           this.alertService.error("Account does not exist, please try again or register a new account.");
         } else {
           //handle successful login here
-          this.pictureService.getPicturesOfAlbum(localStorage.getItem("currentMemberGroup"), localStorage.getItem("currentGroupAlbum")).subscribe(
+          this.pictureService.getPublicPicturesOfAlbum(localStorage.getItem("currentGroupAlbumAccount"), localStorage.getItem("currentGroupAlbum")).subscribe(
             pictures => {
               this.pictureList = pictures;
               this.loading = false;
@@ -123,8 +127,13 @@ export class GroupAlbumComponent implements OnInit {
   }
 
   deletePicture(pictureName: string){
+    if(localStorage.getItem("currentAccount")!==localStorage.getItem("currentPublicAlbumAccount")){
+      this.alertService.error("You do not have permission to delete pictures from this album.");
+      window.scroll(0,0);
+      return;
+    }
     this.loading=true;
-    this.pictureService.deletePictureFromAlbum(localStorage.getItem("currentMemberGroup"), localStorage.getItem("currentGroupAlbum"), pictureName).subscribe(
+    this.pictureService.deletePublicPictureFromAlbum(localStorage.getItem("currentAccount"), localStorage.getItem("currentGroupAlbum"), pictureName).subscribe(
       result => {
         if(result != 0){
           this.alertService.error("Picture was not deleted");
@@ -132,7 +141,7 @@ export class GroupAlbumComponent implements OnInit {
         } else {
           this.alertService.success("Picture was deleted");
           //refresh picture list after deletion
-          this.pictureService.getPicturesOfAlbum(localStorage.getItem("currentMemberGroup"), localStorage.getItem("currentGroupAlbum")).subscribe(
+          this.pictureService.getPublicPicturesOfAlbum(localStorage.getItem("currentGroupAlbumAccount"), localStorage.getItem("currentGroupAlbum")).subscribe(
             pictures => {
               this.pictureList = pictures;
               this.loading=false;

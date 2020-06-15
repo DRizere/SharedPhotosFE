@@ -4,9 +4,9 @@
 <ul>
     <li *ngFor="let album of albumList">
         <a (click)="drilldown(album.albumName, album.accountName)" class="text-primary">{{album.albumName}}</a>
-        <a *ngIf="album.accountName!='GuestUser'">- </a>
-        <a *ngIf="album.accountName!='GuestUser'" (click)="deleteAlbum(album.albumName, album.accountName)" class="text-danger">Delete</a>
         by {{album.accountName}}
+        <a *ngIf="album.accountName!='GuestUser'"> - </a>
+        <a *ngIf="album.accountName!='GuestUser'" (click)="deleteAlbum(album.albumName, album.accountName)" class="text-danger">Delete</a>
     </li>
 </ul>
 </ng-container>

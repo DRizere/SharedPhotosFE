@@ -71,8 +71,9 @@ export class GroupViewerComponent implements OnInit {
     return this.albumForm.controls;
   }
 
-  drilldown(albumName: string){
+  drilldown(albumName: string, accountName: string){
     localStorage.setItem("currentGroupAlbum", albumName);
+    localStorage.setItem("currentGroupAlbumAccount", accountName);
     this.router.navigate(["groups/selected/album"]);
   }
 

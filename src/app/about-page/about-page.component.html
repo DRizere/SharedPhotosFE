@@ -5,8 +5,12 @@
     my abilities as a computer programmer. Using this application, you should be able to create albums and upload pictures. There is also a groups
     functionality which allows you to invite other users to join a group and then you can share photos within the group.
 
-    This web application is written using Typescript and is hosted on Google's Firebase platform. HTTP requests sent from the webapp are sent
-    to a Java Web Server I am running on Heroku. This CRUD application on Heroku handles requests sent from the webapp and interprets them 
+    This web application is written using Angular and is hosted on Google's Firebase platform. HTTP requests sent from the webapp are sent
+    to a Spring Web Application I am running on Heroku. The Spring app sends queries to a MySQL Database I'm hosting. Using this information, 
+    it can then make requests to a media service API I have written and hosted. That API serves up the photos that are eventually displayed 
+    on this webapp.
+    
+    This CRUD application on Heroku handles requests sent from the webapp and interprets them 
     to send requests on to two other resources I have setup. The CRUD application uses a handful of data access layer packages I built so that
     it can make database requests. On a machine in my home, I'm running another Java web server to handle ingestion and
     serving of media. This media service application receives and serves up photos when the CRUD application asks for them. 
