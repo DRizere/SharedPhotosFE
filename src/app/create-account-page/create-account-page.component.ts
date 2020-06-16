@@ -36,14 +36,14 @@ export class CreateAccountPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loggedInCheck();
-
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
       name: ['', Validators.required],
-      email: ['', Validators.required]
+      email: ['']
     });
+
+    this.loggedInCheck();
 
     if(localStorage.getItem("accountName") != null){
       this.alertService.success("You are still logged in");

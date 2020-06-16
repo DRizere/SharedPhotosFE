@@ -6,6 +6,7 @@
         <a (click)="drilldown(group.groupName)" class="text-primary">{{group.groupName}}</a>
         - <a (click)="deleteGroup(group.groupName)" class="text-danger">Delete</a>
     </li>
+    <li *ngIf="groupList.length==0">You're not the owner of any groups. Try making one!</li>
 </ul>
 </ng-container>
 <br>

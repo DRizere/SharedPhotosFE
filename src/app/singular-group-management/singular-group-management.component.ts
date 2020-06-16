@@ -34,6 +34,9 @@ export class SingularGroupManagementComponent implements OnInit {
   }
 
   ngOnInit(): void { 
+    this.groupmemberForm = this.formBuilder.group({
+      accountName: ['', Validators.required],
+    });
     if(localStorage.getItem("currentManagingGroup")==null){
       this.alertService.error("Please select a group");
       this.router.navigate(["group-management"]); 
@@ -50,9 +53,7 @@ export class SingularGroupManagementComponent implements OnInit {
       }
     )
     document.getElementById("currentGroupHeader").innerHTML ="Selected Group: " + localStorage.getItem("currentManagingGroup");
-    this.groupmemberForm = this.formBuilder.group({
-      accountName: ['', Validators.required],
-    });
+
 
     this.loading = true;
     this.groupMemberService.readGroupMembersByGroup(localStorage.getItem("currentManagingGroup")).subscribe(

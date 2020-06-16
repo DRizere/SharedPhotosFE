@@ -35,6 +35,10 @@ export class YourGroupsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.albumForm = this.formBuilder.group({
+      albumName: ['', Validators.required]
+    });
+    
     if(localStorage.getItem("currentAccount")==null){
       this.alertService.error("Please log in", true);
       this.router.navigate(["login"]);
@@ -50,9 +54,7 @@ export class YourGroupsComponent implements OnInit {
         }
       }
     )
-    this.albumForm = this.formBuilder.group({
-      albumName: ['', Validators.required]
-    });
+
     this.loadGroups();
   }
 

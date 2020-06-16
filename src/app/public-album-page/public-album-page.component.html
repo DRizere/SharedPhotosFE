@@ -12,11 +12,11 @@
 </ng-container>
 <br>
 
-<h3>Create a new public album:</h3>
+<h3>Create a new public album as GuestUser:</h3>
 <form [formGroup]="albumForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
         <label for="albumName">Album Name</label>
-        <input type="text" formControlName="albumName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.albumName.errors }" />
+        <input type="text" formControlName="albumName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.albumName.errors }" maxlength="20"/>
         <div *ngIf="submitted && f.albumName.errors" class="invalid-feedback">
             <div *ngIf="f.albumName.errors.required">Album name is required</div>
         </div>

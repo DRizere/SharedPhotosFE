@@ -11,6 +11,7 @@ import { GroupViewerComponent } from './group-viewer/group-viewer.component';
 import { GroupAlbumComponent } from './group-album/group-album.component';
 import { PublicAlbumPageComponent } from './public-album-page/public-album-page.component';
 import { SingularPublicAlbumPageComponent } from './singular-public-album-page/singular-public-album-page.component';
+import { AboutPageComponent } from './about-page/about-page.component';
 
 
 const routes: Routes = [
@@ -25,7 +26,8 @@ const routes: Routes = [
   { path: 'groups/selected', component: GroupViewerComponent },
   { path: 'groups/selected/album', component: GroupAlbumComponent },
   { path: 'public/albums', component: PublicAlbumPageComponent },
-  { path: 'public/albums/selected', component: SingularPublicAlbumPageComponent }
+  { path: 'public/albums/selected', component: SingularPublicAlbumPageComponent },
+  { path: 'about', component: AboutPageComponent }
 ]
 
 @NgModule({

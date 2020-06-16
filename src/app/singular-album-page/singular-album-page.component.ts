@@ -36,6 +36,10 @@ export class SingularAlbumPageComponent implements OnInit {
   }
 
   ngOnInit(): void { 
+    this.pictureForm = this.formBuilder.group({
+      pictureName: ['', Validators.required],
+      pictureUp: ['', Validators.required]
+    });
     if(localStorage.getItem("currentAlbum")==null){
       this.alertService.error("Please select an album");
       this.router.navigate(["albums"]);
@@ -52,10 +56,6 @@ export class SingularAlbumPageComponent implements OnInit {
       }
     )
     document.getElementById("currentAlbumHeader").innerHTML ="Current Album: " + localStorage.getItem("currentAlbum");
-    this.pictureForm = this.formBuilder.group({
-      pictureName: ['', Validators.required],
-      pictureUp: ['', Validators.required]
-    });
 
     this.loading = true;
     this.pictureService.getPicturesOfAlbum(localStorage.getItem("currentAccount"), localStorage.getItem("currentAlbum")).subscribe(

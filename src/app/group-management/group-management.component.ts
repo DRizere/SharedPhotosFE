@@ -30,6 +30,9 @@ export class GroupManagementComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.groupForm = this.formBuilder.group({
+      groupName: ['', Validators.required]
+    });
     if(localStorage.getItem("currentAccount")==null){
       this.alertService.error("Please log in", true);
       this.router.navigate(["login"]);
@@ -45,9 +48,6 @@ export class GroupManagementComponent implements OnInit {
         }
       }
     )
-    this.groupForm = this.formBuilder.group({
-      groupName: ['', Validators.required]
-    });
     this.loadGroups();
   }
 
@@ -85,7 +85,7 @@ export class GroupManagementComponent implements OnInit {
         } else {
           this.groupService.createGroup(localStorage.getItem("currentAccount"),this.f.groupName.value)
             .subscribe(response => {
-              if(response===0){
+              if(response==0){
                 this.alertService.success("Group was created");
                 //refresh album list after creation
                 this.groupService.readGroups(localStorage.getItem("currentAccount")).subscribe(

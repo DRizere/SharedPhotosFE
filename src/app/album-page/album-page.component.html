@@ -14,6 +14,9 @@
         <li *ngFor="let private of selectedAlbumDeniedGroups">
             {{private.groupName}} - <a (click)=allowShare(private.groupName) class="text-primary">Allow Sharing</a>
         </li>
+        <li *ngIf="selectedAlbumAllowedGroups.length==0 || selectedAlbumDeniedGroups.length==0">
+            You're not part of any groups to share albums with.
+        </li>
     </ul>
     </ng-container>
 
@@ -38,7 +41,7 @@
 <form [formGroup]="albumForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
         <label for="albumName">Album Name</label>
-        <input type="text" formControlName="albumName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.albumName.errors }" />
+        <input type="text" formControlName="albumName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.albumName.errors }" pattern=".{1,20}" required title="1 to 20 characters" />
         <div *ngIf="submitted && f.albumName.errors" class="invalid-feedback">
             <div *ngIf="f.albumName.errors.required">Album name is required</div>
         </div>

@@ -31,6 +31,10 @@ export class GroupViewerComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.albumForm = this.formBuilder.group({
+      albumName: ['', Validators.required]
+    });
+    
     if(localStorage.getItem("currentAccount")==null){
       this.alertService.error("Please log in", true);
       this.router.navigate(["login"]);
@@ -47,9 +51,7 @@ export class GroupViewerComponent implements OnInit {
       }
     )
     document.getElementById("currentMemberGroupHeader").innerHTML ="Current Group: " + localStorage.getItem("currentMemberGroup");
-    this.albumForm = this.formBuilder.group({
-      albumName: ['', Validators.required]
-    });
+
     this.loadAlbums();
   }
 

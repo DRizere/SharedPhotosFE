@@ -37,16 +37,17 @@ export class SingularPublicAlbumPageComponent implements OnInit {
   }
 
   ngOnInit(): void { 
+    this.pictureForm = this.formBuilder.group({
+      pictureName: ['', Validators.required],
+      pictureUp: ['', Validators.required]
+    });
     if(localStorage.getItem("currentPublicAlbum")==null || localStorage.getItem("currentPublicAlbumAccount")==null){
       this.alertService.error("Please select an album");
       this.router.navigate(["public/albums"]);
       return;
     }
     document.getElementById("currentAlbumHeader").innerHTML ="Current Album: " + localStorage.getItem("currentPublicAlbum");
-    this.pictureForm = this.formBuilder.group({
-      pictureName: ['', Validators.required],
-      pictureUp: ['', Validators.required]
-    });
+
 
     this.loading = true;
     this.pictureService.getPublicPicturesOfAlbum(localStorage.getItem("currentPublicAlbumAccount"), localStorage.getItem("currentPublicAlbum")).subscribe(

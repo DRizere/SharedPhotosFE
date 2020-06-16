@@ -48,6 +48,9 @@ export class AlbumPageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.albumForm = this.formBuilder.group({
+      albumName: ['', Validators.required]
+    });
     if(localStorage.getItem("currentAccount")==null){
       this.alertService.error("Please log in", true);
       this.router.navigate(["login"]);
@@ -63,9 +66,6 @@ export class AlbumPageComponent implements OnInit {
         }
       }
     )
-    this.albumForm = this.formBuilder.group({
-      albumName: ['', Validators.required]
-    });
     this.loadAlbums();
     this.loadGroups();
   }
@@ -194,7 +194,6 @@ export class AlbumPageComponent implements OnInit {
 
 
   open(content, albumName: string){
-    console.log("hello");
     this.currentModalAlbum = albumName;
     this.updateModal();
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
