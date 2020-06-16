@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, Form } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, Form, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '../AccountService/account.service';
 import { AlertService } from '../AlertService/alert.service';
@@ -38,7 +38,7 @@ export class CreateAccountPageComponent implements OnInit {
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
-      password: ['', Validators.required],
+      password: new FormControl('', [Validators.required, Validators.minLength(8)]),
       name: ['', Validators.required],
       email: ['']
     });

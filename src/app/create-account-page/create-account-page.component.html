@@ -12,6 +12,7 @@
         <input type="password" autocomplete="on" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }"  pattern=".{8,}" required title="8 character minimum" />
         <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
             <div *ngIf="f.password.errors.required">Password is required</div>
+            <div *ngIf="f.password.errors.minlength">Password must be at least 8 characters long.</div>
         </div>
     </div>
     <div class="form-group">
