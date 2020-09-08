@@ -94,10 +94,8 @@ export class SingularPublicAlbumPageComponent implements OnInit {
 
     this.loading = true;
     var accountForUpload = localStorage.getItem("currentPublicAlbumAccount")!=="GuestUser" ? localStorage.getItem("currentAccount") : "GuestUser";
-    console.log("1");
     this.pictureService.pushPublicPictureToAlbum(accountForUpload, localStorage.getItem("currentPublicAlbum"), this.f.pictureName.value, this.fileToUpload.base64Encoding, this.fileToUpload.pictureExtension)
       .subscribe(data => {
-        console.log("2");
         if(data != 0){
           this.loading=false;
           this.alertService.error("Account does not exist, please try again or register a new account.");
