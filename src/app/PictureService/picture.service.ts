@@ -95,14 +95,26 @@ export class PictureService {
       "pictureName" : "${pictureName}",
       "base64Encoding": "data:${pictureExtension};base64,${pictureEncoding}"
     }`;
-    return this.http.post<any>(this.publicImagesUrl+'create', requestBody,  Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
-      .pipe(
-        map(result => {
-          if(result != null){
-            return result[0];
-          }
-        })
-    );
+    if(currentAccount!== "GuestUser"){
+      return this.http.post<any>(this.imagesUrl+'create', requestBody,  Utils.buildSPDKHttpOptions(localStorage.getItem("SPDKSessionKey"), localStorage.getItem("currentAccount")))
+        .pipe(
+          map(result => {
+            if(result != null){
+              return result[0];
+            }
+          })
+      );
+    } else {
+      return this.http.post<any>(this.publicImagesUrl+'create', requestBody,  Utils.buildDefaultHttpOptions())
+        .pipe(
+          map(result => {
+            if(result != null){
+              return result[0];
+            }
+          })
+      );
+    }
+
   }
 
   deletePublicPictureFromAlbum(currentAccount: string,  currentAlbum: string, pictureName: string){

@@ -1,0 +1,12 @@
+.navbar {
+    justify-content: space-between !important;
+}
+
+.navbar-left {
+    display: flex;
+}       
+
+.navbar-right {
+    display: flex;
+}
+

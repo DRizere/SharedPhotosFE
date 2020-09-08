@@ -104,7 +104,7 @@ export class PublicAlbumPageComponent implements OnInit {
           }
         }
       );
-    } else if(accountName === "GuestAccount"){
+    } else if(accountName === "GuestUser"){
       this.loading = true;
       this.albumService.deletePublicAlbum(albumName).subscribe(
         result => {

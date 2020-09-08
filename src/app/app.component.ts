@@ -27,6 +27,10 @@ export class AppComponent implements OnInit{
   ) {
   }
 
+  readLocalStorageValue(key: string){
+    return localStorage.getItem(key);
+  }
+
   logout() {
       this.accountService.logout();
       this.albumService.logout();
